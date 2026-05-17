@@ -3,6 +3,12 @@ import prisma from "../prisma/client.js";
 export async function posts () {
     return await prisma.post.findMany({
         include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
             comments: true
         }
     });
@@ -14,6 +20,10 @@ export async function postById (postId) {
             id: postId
         },
         include: {
+            user: {
+                id: true,
+                name: true
+            },
             comments: true
         }
     });
