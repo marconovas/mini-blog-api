@@ -51,9 +51,9 @@ export async function getPostById (req, res) {
 export async function newPost (req, res) {
     const title = req.body.title || "";
     const content = req.body.content || "";
-    const userId = parseInt(req.body.userId); //CHECK USERID
+    const userId = req.user.userId; //GRAB USER ID
 
-    if(title.trim().length === 0 || content.trim().length === 0 || isNaN(userId)){
+    if(!title.trim() || !content.trim()){
         return res.status(400).json({
             success: false,
             message: "Provided Data is Invalid."
@@ -80,7 +80,7 @@ export async function editPost (req, res) {
     const content = req.body.content || "";
     const postId = parseInt(req.params.id);
 
-    if(title.trim().length === 0 || content.trim().length === 0 || isNaN(postId)){
+    if(!title.trim() || !content.trim() || isNaN(postId)){
         return res.status(400).json({
             success: false,
             message: "Information not Valid."
@@ -88,6 +88,28 @@ export async function editPost (req, res) {
     }
 
     try{
+
+        //OWNERSHIP
+        //FETCH POST
+        const post = await postService.postById(postId);
+
+        //CHECK POST
+        if(!post){
+            return res.status(404).json({
+                success: false,
+                message: "Post not Found."
+            })
+        }
+
+        //CHECK OWNERSHIP
+        if(req.user.userId !== post.userId){
+            return res.status(403).json({
+                success: false,
+                message: "Action Forbidden."
+            });
+        }
+
+        //MODIFY POST IF CHECKED
         await postService.modify(postId, title, content);
 
         res.status(200).json({
@@ -95,9 +117,9 @@ export async function editPost (req, res) {
             message: "Post modified."
         })
     } catch(error) {
-        return res.status(404).json({
+        return res.status(500).json({
             success: false,
-            message: "Post not Found."
+            message: "Internal Server Error."
         })
     }
 }
@@ -113,6 +135,26 @@ export async function deletePost (req, res) {
     }
 
     try{
+
+        //OWNERSHIP
+        const post = await postService.postById(postId);
+
+        if(!post) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not Found."
+            })
+        }
+
+        //CHECK USER ID AND POST USER ID
+        if(req.user.userId !== post.userId){
+            return res.status(403).json({
+                success: false,
+                message: "Action Forbidden."
+            });
+        }
+
+        //REMOVE POST IF CHECKED
         await postService.remove(postId);
 
         res.status(200).json({
@@ -120,9 +162,9 @@ export async function deletePost (req, res) {
             message: "Post Removed from DB."
         });
     } catch(error) {
-        return res.status(404).json({
+        return res.status(500).json({
             success: false,
-            message: "Post not Found."
+            message: "Internal Server Error."
         })
     }
 }
