@@ -8,7 +8,7 @@ export async function register (req, res) {
     const { name, email, password } = req.body;
 
     //CHECK IF USER ALREADY EXISTS
-    const existingUser = await UserService.findPublicUser(email);
+    const existingUser = await UserService.findPrivateUserByEmail(email);
 
     if(existingUser){
         return res.status(409).json({
@@ -19,11 +19,11 @@ export async function register (req, res) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await UserService.create({
+    await UserService.createUser(
         name,
         email,
-        password: hashedPassword
-    });
+        hashedPassword
+    );
 
     res.status(201).json({
         success: true,
@@ -34,7 +34,7 @@ export async function register (req, res) {
 export async function login (req, res) {
     const { email, password } = req.body;
 
-    const user = await UserService.findPrivateUser(email);
+    const user = await UserService.findPrivateUserByEmail(email);
 
     if (!user) return res.status(401).json({
         success: false,

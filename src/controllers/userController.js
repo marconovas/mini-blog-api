@@ -1,8 +1,8 @@
-import * as userService from "../services/userService.js";
+import userService from "../services/userService.js";
 
 export async function getUsers (req, res) {
     try{
-        const users = await userService.users();
+        const users = await userService.getUsers();
 
         res.json({
             success: true,
@@ -27,7 +27,7 @@ export async function getUserById (req, res) {
     }
 
     try{
-        const user = await userService.userById(userId);
+        const user = await userService.findSafeUserById(userId); ////
 
         if(!user){
             return res.status(404).json({
@@ -61,13 +61,16 @@ export async function newUser (req, res) {
     }
 
     try{
-        await userService.create(name, email, password);
+        await userService.createUser(name, email, password);
 
         res.status(201).json({
             success: true,
             message: "New User Added."
         })
     } catch(error) {
+
+        console.log(error);
+        
 
         if(error.code === 'P2002'){ //DUPLICATED DATA/EMAIL ERROR
             return res.status(409).json({
