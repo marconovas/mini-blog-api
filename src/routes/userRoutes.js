@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserById, getUsers, newUser } from "../controllers/userController.js";
+import { getUserById, getUsers } from "../controllers/userController.js";
 import { getUserByIdValidator } from "../middleware/validators/auth.validator.js";
 import { validate } from "../middleware/validate.js";
 
