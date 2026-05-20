@@ -4,7 +4,7 @@ export async function getAllComments (req, res) {
     try{
         const comments = await CommentService.getComments();
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             comments
         });
@@ -17,14 +17,7 @@ export async function getAllComments (req, res) {
 }
 
 export async function getCommentById (req, res) {
-    const commentId = parseInt(req.params.id);
-
-    if(isNaN(commentId)){
-        return res.status(400).json({
-            success: false,
-            message: "Missing or Invalid Data."
-        });
-    }
+    const commentId = req.params.id;
 
     try{
         const comment = await CommentService.getCommentById(commentId);
@@ -36,7 +29,7 @@ export async function getCommentById (req, res) {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             comment
         });
@@ -49,14 +42,7 @@ export async function getCommentById (req, res) {
 }
 
 export async function getCommentsByPost (req, res) {
-    const postId = parseInt(req.params.id);
-
-    if(isNaN(postId)){
-        return res.status(400).json({
-            success: false,
-            message: "Invalid ID."
-        });
-    }
+    const postId = req.params.id;
 
     try{
         const comments = await CommentService.getCommentsByPost(postId);
@@ -76,26 +62,18 @@ export async function getCommentsByPost (req, res) {
 
 export async function newComment (req, res) {
     const { content } = req.body;
-    const postId = parseInt(req.params.id);
+    const postId = req.params.id;
     const userId = req.user.userId;
-
-    if(!content || !content.trim() || isNaN(postId)){
-        return res.status(400).json({
-            success: false,
-            message: "Missing Data."
-        });
-    }
 
     try{
         const comment = await CommentService.newComment(content, userId, postId);
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: "Comment Created.",
             comment
         })
     } catch(error) {
-        console.log(error);
         return res.status(500).json({
             success: false, 
             message: "Internal Server Error."
@@ -105,16 +83,8 @@ export async function newComment (req, res) {
 
 export async function editComment (req, res) {
     const { content } = req.body;
-    const commentId = parseInt(req.params.id);
+    const commentId = req.params.id;
     const userId = req.user.userId;
-
-    if(!content || !content.trim() || isNaN(commentId)){
-        return res.status(400).json({
-            success: false,
-            message: "Invalid Data."
-        })
-    }
-
     try{
         const comment = await CommentService.getCommentById(commentId);
     
@@ -134,7 +104,7 @@ export async function editComment (req, res) {
 
         const updatedComment = await CommentService.modifyComment(commentId, content);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Comment Successfully Modified.",
             updatedComment
@@ -148,15 +118,8 @@ export async function editComment (req, res) {
 }
 
 export async function deleteComment (req, res) {
-    const commentId = parseInt(req.params.id);
+    const commentId = req.params.id;
     const userId = req.user.userId;
-
-    if(!userId || isNaN(commentId)){
-        return res.status(400).json({
-            success: false,
-            message: "Missing or Invalid Data."
-        });
-    } 
 
     try{
         const comment = await CommentService.getCommentById(commentId);

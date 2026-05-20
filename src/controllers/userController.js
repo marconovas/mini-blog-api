@@ -4,12 +4,12 @@ export async function getUsers (req, res) {
     try{
         const users = await userService.getUsers();
 
-        res.json({
+        return res.json({
             success: true,
             users
         });
     } catch(error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Internal Server Error"
         })
@@ -17,14 +17,7 @@ export async function getUsers (req, res) {
 }
 
 export async function getUserById (req, res) {
-    const userId = parseInt(req.params.id);
-
-    if(isNaN(userId)){
-        return res.status(400).json({
-            success: false,
-            message: "Invalid Data."
-        });
-    }
+    const userId = req.params.id;
 
     try{
         const user = await userService.findSafeUserById(userId); ////
@@ -36,7 +29,7 @@ export async function getUserById (req, res) {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             user
         });
@@ -45,43 +38,5 @@ export async function getUserById (req, res) {
             success: false,
             message: "Internal Server Error."
         });
-    }
-}
-
-export async function newUser (req, res) {
-    const name = req.body.name || "";
-    const email = req.body.email || "";
-    const password = req.body.password || "";
-
-    if(name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0){
-        return res.status(400).json({
-            success: false,
-            message: "Invalid Data."
-        })
-    }
-
-    try{
-        await userService.createUser(name, email, password);
-
-        res.status(201).json({
-            success: true,
-            message: "New User Added."
-        })
-    } catch(error) {
-
-        console.log(error);
-        
-
-        if(error.code === 'P2002'){ //DUPLICATED DATA/EMAIL ERROR
-            return res.status(409).json({
-                success: false,
-                message: "E-mail already Taken."
-            });
-        }
-
-        return res.status(500).json({
-            success: false,
-            message: "User Was not Created."
-        })
     }
 }

@@ -4,7 +4,7 @@ export async function getAllPosts (req, res) {
     try{
         const posts = await postService.posts();
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true, 
             posts
         });
@@ -17,14 +17,7 @@ export async function getAllPosts (req, res) {
 }
 
 export async function getPostById (req, res) {
-    const postId = parseInt(req.params.id);
-    
-    if(isNaN(postId)){
-        return res.status(400).json({
-            success: false,
-            message: "Invalid post ID."
-        })
-    }
+    const postId = req.params.id;
 
     try{
         const post = await postService.postById(postId);
@@ -36,7 +29,7 @@ export async function getPostById (req, res) {
             })
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true, 
             post
         });
@@ -53,17 +46,10 @@ export async function newPost (req, res) {
     const content = req.body.content || "";
     const userId = req.user.userId; //GRAB USER ID
 
-    if(!title.trim() || !content.trim()){
-        return res.status(400).json({
-            success: false,
-            message: "Provided Data is Invalid."
-        })
-    }
-
     try{
         await postService.create(userId, title, content);
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: "New Post Created."
         })
@@ -78,14 +64,7 @@ export async function newPost (req, res) {
 export async function editPost (req, res) {
     const title = req.body.title || "";
     const content = req.body.content || "";
-    const postId = parseInt(req.params.id);
-
-    if(!title.trim() || !content.trim() || isNaN(postId)){
-        return res.status(400).json({
-            success: false,
-            message: "Information not Valid."
-        })
-    }
+    const postId = req.params.id;
 
     try{
 
@@ -112,7 +91,7 @@ export async function editPost (req, res) {
         //MODIFY POST IF CHECKED
         await postService.modify(postId, title, content);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Post modified."
         })
@@ -125,14 +104,7 @@ export async function editPost (req, res) {
 }
 
 export async function deletePost (req, res) {
-    const postId = parseInt(req.params.id);
-
-    if(isNaN(postId)){
-        return res.status(400).json({
-            success: false,
-            message: "Invalid information."
-        })
-    }
+    const postId = req.params.id;
 
     try{
 
@@ -157,7 +129,7 @@ export async function deletePost (req, res) {
         //REMOVE POST IF CHECKED
         await postService.remove(postId);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Post Removed from DB."
         });
