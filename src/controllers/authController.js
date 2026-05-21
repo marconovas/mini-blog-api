@@ -59,9 +59,14 @@ export async function login (req, res) {
 
     //TOKEN
     const TOKEN = jwt.sign(
-        {userId : user.id},
+        {
+            userId : user.id,
+            role: user.role
+        },
         SECRET,
-        {expiresIn: '1h'}
+        {
+            expiresIn: '1h'
+        }
     );
 
     return res.status(200).json({

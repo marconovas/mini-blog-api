@@ -11,6 +11,12 @@ class UserService {
         })
     }
 
+    static async deleteUser (id) {
+        return await prisma.user.delete({
+            where: { id }
+        });
+    }
+
     static async getUsers() {
         return await prisma.user.findMany({
             select: {
