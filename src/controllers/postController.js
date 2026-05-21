@@ -119,7 +119,7 @@ export async function deletePost (req, res) {
         }
 
         //CHECK USER ID AND POST USER ID
-        if(req.user.userId !== post.userId){
+        if(req.user.userId !== post.userId && req.user.role !== "ADMIN"){
             return res.status(403).json({
                 success: false,
                 message: "Action Forbidden."

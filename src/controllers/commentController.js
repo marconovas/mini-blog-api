@@ -131,7 +131,7 @@ export async function deleteComment (req, res) {
             })
         }
 
-        if(userId !== comment.userId){
+        if(userId !== comment.userId && req.user.role !== "ADMIN"){
             return res.status(403).json({
                 success: false,
                 message: "Action Forbidden."
