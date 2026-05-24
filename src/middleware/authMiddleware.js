@@ -6,7 +6,7 @@ export function authMiddleware (req, res, next) {
     try{
         const auth = req.headers.authorization;
 
-        if(auth?.startsWith("Bearer ")){
+        if(!auth?.startsWith("Bearer ")){
             return res.status(401).json({
                 success: false,
                 message: "Token Required."

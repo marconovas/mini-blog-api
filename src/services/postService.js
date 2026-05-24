@@ -21,8 +21,10 @@ export async function postById (postId) {
         },
         include: {
             user: {
-                id: true,
-                name: true
+                select: {
+                    id: true,
+                    name: true
+                }
             },
             comments: true
         }

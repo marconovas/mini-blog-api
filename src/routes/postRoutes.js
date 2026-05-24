@@ -8,17 +8,16 @@ import { authorize } from "../middleware/authorize.js";
 
 const router = Router();
 
+//PUBLIC URLS
 router.get("/", getAllPosts);
 router.get("/:id", 
     postIdValidator,
     validate,
-    authorize("ADMIN", "USER"),
     getPostById
 );
 router.get("/:id/comments", 
     postIdValidator,
     validate,
-    authorize("ADMIN", "USER"),
     getCommentsByPost
 ); //GET COMMENTS BY POST
 
