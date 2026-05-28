@@ -26,7 +26,16 @@ export async function postById (postId) {
                     name: true
                 }
             },
-            comments: true
+            comments: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    }
+                }
+            }
         }
     });
 }

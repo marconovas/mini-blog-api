@@ -6,7 +6,7 @@ export function validate (req, res, next) {
     if(!errors.isEmpty()){
         return res.status(400).json({ 
             success: false,
-            errors: errors.array() 
+            errors: errors.array()[0].msg 
         });
     }
 
