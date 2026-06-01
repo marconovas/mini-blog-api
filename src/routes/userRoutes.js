@@ -3,6 +3,7 @@ import { deleteUserById, getPrivateUserInfo, getUserById, getUsers } from "../co
 import { getUserByIdValidator } from "../middleware/validators/auth.validator.js";
 import { validate } from "../middleware/validate.js";
 import { authorize } from "../middleware/authorize.js";
+import { getCommentsByUser } from "../controllers/commentController.js";
 
 const router = Router();
 
@@ -19,6 +20,13 @@ router.delete("/:id",
     authorize("ADMIN", "USER"),
     deleteUserById
 );
+
+router.get("/:id/comments",
+    getUserByIdValidator,
+    validate,
+    authorize("ADMIN", "USER"),
+    getCommentsByUser
+)
 
 //ADMIN
 router.get("/:id/admin", 

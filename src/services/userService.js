@@ -36,6 +36,9 @@ class UserService {
                 createdAt: true,
                 
                 posts: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    },
                     select: {
                         title: true,
                         content: true,
@@ -44,6 +47,9 @@ class UserService {
                 },
                 
                 comments: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    },
                     select: {
                         postId: true,
                         content: true,
