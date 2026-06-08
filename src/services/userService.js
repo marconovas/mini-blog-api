@@ -11,6 +11,13 @@ class UserService {
         })
     }
 
+    static async editUser( id, data ) {
+        return await prisma.user.update({
+            where: { id },
+            data
+        });
+    }
+
     static async deleteUser (id) {
         return await prisma.user.delete({
             where: { id }
@@ -31,11 +38,16 @@ class UserService {
         return prisma.user.findUnique({
             where: { id },
             select: {
+                id: true,
                 name: true,
                 email: true,
                 createdAt: true,
+                bio: true,
                 
                 posts: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    },
                     select: {
                         title: true,
                         content: true,
@@ -44,6 +56,9 @@ class UserService {
                 },
                 
                 comments: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    },
                     select: {
                         postId: true,
                         content: true,

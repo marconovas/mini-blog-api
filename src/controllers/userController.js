@@ -41,6 +41,42 @@ export async function getUserById (req, res) {
     }
 }
 
+
+//UPDATE USER
+export async function updateUser (req, res) {
+    const userId = req.params.id;
+    const { bio } = req.body;
+
+    try{
+        if(
+            req.user.userId !== Number(userId) && 
+            req.user.role !== "ADMIN"
+        ){
+            res.status(403).json({
+                success: false,
+                message: "Forbidden."
+            })
+        }
+
+        const user = await userService.editUser(
+            userId,
+            { bio }
+        );
+
+
+        return res.status(200).json({
+            success: true,
+            user
+        })
+
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error."
+        }) 
+    }
+}
+
 //USER DELETE
 export async function deleteUserById(req, res) {
     const userId = req.params.id;
@@ -55,7 +91,10 @@ export async function deleteUserById(req, res) {
             });
         }
 
-        if(req.user.userId !== userId && req.user.role !== "ADMIN"){
+        if(
+            req.user.userId !== userId && 
+            req.user.role !== "ADMIN"
+        ){
             return res.status(403).json({
                 success: false,
                 message: "Action Forbidden."

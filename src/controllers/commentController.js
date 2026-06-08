@@ -41,6 +41,25 @@ export async function getCommentById (req, res) {
     }
 }
 
+export async function getCommentsByUser(req, res) {
+    const { id } = req.params;
+    
+    try{
+        const comments = await CommentService.commentsByUser(id);
+
+        return res.status(200).json({
+            success: true,
+            comments
+        });
+
+    } catch(error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error."
+        });
+    }
+}
+
 export async function getCommentsByPost (req, res) {
     const postId = req.params.id;
 

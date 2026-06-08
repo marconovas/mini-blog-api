@@ -58,7 +58,7 @@ export async function login (req, res) {
     }
 
     //TOKEN
-    const TOKEN = jwt.sign(
+    const token = jwt.sign(
         {
             userId : user.id,
             role: user.role
@@ -69,8 +69,15 @@ export async function login (req, res) {
         }
     );
 
+
     return res.status(200).json({
         success: true,
-        TOKEN
+        token,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        }
     });
 }

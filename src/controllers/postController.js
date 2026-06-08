@@ -47,11 +47,12 @@ export async function newPost (req, res) {
     const userId = req.user.userId; //GRAB USER ID
 
     try{
-        await postService.create(userId, title, content);
+        const post = await postService.create(userId, title, content);
 
         return res.status(201).json({
             success: true,
-            message: "New Post Created."
+            message: "New Post Created.",
+            post
         })
     } catch (error) {
         return res.status(500).json({
