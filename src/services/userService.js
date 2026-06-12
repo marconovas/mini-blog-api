@@ -62,9 +62,24 @@ class UserService {
                         createdAt: 'desc'
                     },
                     select: {
+                        id: true,
                         postId: true,
                         content: true,
-                        createdAt: true
+                        createdAt: true,
+
+                        user: {
+                            select: {
+                                id: true,
+                                name: true
+                            }
+                        },
+
+                        post: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
                     }
                 }
             }

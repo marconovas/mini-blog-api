@@ -83,7 +83,7 @@ export async function newComment (req, res) {
     const { content } = req.body;
     const postId = req.params.id;
     const userId = req.user.userId;
-
+    
     try{
         const comment = await CommentService.newComment(content, userId, postId);
 
