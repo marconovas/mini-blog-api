@@ -54,6 +54,11 @@ This API is designed to serve as the backend for a full-stack blog platform, han
 
 ---
 
+## API URL
+[https://mini-blog-api-j5kh.onrender.com](https://mini-blog-api-j5kh.onrender.com/)
+
+---
+
 ## 🛠️ Setup (coming soon)
 
 Instructions for installation, environment variables, and database setup will be added as the project progresses.
